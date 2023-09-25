@@ -10,7 +10,7 @@ import java.time.LocalDate
 class TestHelper {
 
     static company(int id) {
-        new Company("Name $id", "ul. Bukowińska 24d/7 02-703 Warszawa, Polska", "iCode Trust Sp. z o.o")
+        new Company("Name $id", "ul. Olchowa 24d/7 02-703 Warszawa, Polska", "iCode Trust Sp. z o.o")
     }
 
     static product(int id) {
