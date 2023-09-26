@@ -10,15 +10,15 @@ import java.nio.file.Path
 class IdCurrentNumberTest extends Specification {
 
     FileService filesService = new FileService()
-    private Path path = File.createTempFile('TemporaryId', '.txt').toPath()
+    Path path = File.createTempFile('TemporaryId', '.txt').toPath()
 
     def "shouldGetNextIdAndIncrement"() {
         given:
         Files.writeString(path as Path, "3")
-        IdCurrentNumber idService = new IdCurrentNumber(filesService, path as String)
+        IdCurrentNumber idCurrentNumber = new IdCurrentNumber(path, filesService)
 
         expect:
-        idService.getNextIdAndIncrement(path as String)
+        idCurrentNumber.getNextIdAndIncrement()
         ['4'] == Files.readAllLines(path)
     }
 }

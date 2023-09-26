@@ -9,7 +9,8 @@
 buildscript {
     ext {
         lombokVersion = '1.18.24'
-        // 1.18.18 is broken - lombok.config is ignored, try to upgrade to 1.18.20 when available
+        springBootVersion = "2.7.7"
+        springDependencyManagmentVersion = '1.1.2'
     }
 }
 plugins {
@@ -21,6 +22,8 @@ plugins {
     id 'checkstyle'
     id 'jacoco'
     id "io.freefair.lombok" version "6.6.1"
+    id 'io.spring.dependency-management' version "${springDependencyManagmentVersion}"
+    id 'org.springframework.boot' version "${springBootVersion}"
 }
 
 repositories {
@@ -41,6 +44,9 @@ dependencies {
 
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.1'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     //Lombok
     annotationProcessor("org.projectlombok:lombok:${lombokVersion}")

@@ -1,14 +1,13 @@
-package pl.futurecollars.invoicing.db.file;
+package pl.futurecollars.invoicing.db.files;
 
-import static pl.futurecollars.invoicing.configuration.Configuration.DATABASE_LOCATION;
-import static pl.futurecollars.invoicing.configuration.Configuration.ID_FILE_LOCATION;
-
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import pl.futurecollars.invoicing.db.Database;
+import pl.futurecollars.invoicing.db.file.IdCurrentNumber;
 import pl.futurecollars.invoicing.model.Invoice;
 import pl.futurecollars.invoicing.service.FileService;
 import pl.futurecollars.invoicing.service.JsonService;
@@ -20,64 +19,69 @@ public class FileDatabase implements Database {
     private final FileService fileService;
     private final JsonService jsonService;
     private final IdCurrentNumber idCurrentNumber;
+    private final Path path;
 
     @Override
     public int save(Invoice invoice) {
-        invoice.setId(idCurrentNumber.getNextIdAndIncrement(ID_FILE_LOCATION));
-        fileService.appendLineToFile(DATABASE_LOCATION, jsonService.objectToJson(invoice));
+        invoice.setId(idCurrentNumber.getNextIdAndIncrement());
+        fileService.appendLineToFile(path, jsonService.objectToJson(invoice));
         return invoice.getId();
     }
 
     @Override
     public Optional<Invoice> getById(int id) {
         printIllegalArgumentException(id);
-        printOutOfBoundsException(id);
-        return fileService.readAllLines(DATABASE_LOCATION).stream()
+        return fileService.readAllLines(path).stream()
                 .filter(line -> line.contains("\"id\":" + id + ","))
-                .map(jsonService::jsonToObject)
+                .map(jsonInvoice -> jsonService.jsonToObject(jsonInvoice, Invoice.class))
                 .findFirst();
     }
 
     @Override
     public List<Invoice> getAlL() {
-        return fileService.readAllLines(DATABASE_LOCATION).stream()
-                .map(jsonService::jsonToObject)
+        return fileService.readAllLines(path).stream()
+                .map(jsonInvoice -> jsonService.jsonToObject(jsonInvoice, Invoice.class))
                 .toList();
     }
 
     @Override
-    public void update(int id, Invoice updatedInvoice) {
+    public Optional<Invoice> update(int id, Invoice updatedInvoice) {
         printIllegalArgumentException(id);
-        printOutOfBoundsException(id);
-        List<String> invoicesToUpdate = new ArrayList<>(fileService.readAllLines(DATABASE_LOCATION).stream()
+        List<String> allInvoices = fileService.readAllLines(path);
+        List<String> invoicesToUpdate = new ArrayList<>(allInvoices.stream()
                 .filter(line -> !line.contains("\"id\":" + id + ","))
                 .toList());
+
+        if (allInvoices.size() == invoicesToUpdate.size()) {
+            throw new IllegalArgumentException("Id " + id + " does not exist");
+        }
 
         updatedInvoice.setId(id);
         invoicesToUpdate.add(jsonService.objectToJson(updatedInvoice));
-        fileService.writeLinesToFile(DATABASE_LOCATION, invoicesToUpdate);
+        fileService.writeLinesToFile(path, invoicesToUpdate);
+        return Optional.of(updatedInvoice);
     }
 
     @Override
-    public void delete(int id) {
+    public Optional<Invoice> delete(int id) {
         printIllegalArgumentException(id);
-        printOutOfBoundsException(id);
-        List<String> invoicesToUpdate = new ArrayList<>(fileService.readAllLines(DATABASE_LOCATION).stream()
+        List<String> invoicesToUpdate = new ArrayList<>(fileService.readAllLines(path).stream()
                 .filter(line -> !line.contains("\"id\":" + id + ","))
                 .toList());
 
-        fileService.writeLinesToFile(DATABASE_LOCATION, invoicesToUpdate);
+        Optional<Invoice> deletedInvoice = fileService.readAllLines(path).stream()
+                .filter(line -> line.contains("\"id\":" + id + ","))
+                .map(jsonInvoice -> jsonService.jsonToObject(jsonInvoice, Invoice.class))
+                .findAny();
+
+        fileService.writeLinesToFile(path, invoicesToUpdate);
+        return deletedInvoice;
+
     }
 
     private void printIllegalArgumentException(int id) {
         if (id < 0) {
             throw new IllegalArgumentException("Error: id cannot be negative");
-        }
-    }
-
-    private void printOutOfBoundsException(int id) {
-        if (id > fileService.readAllLines(DATABASE_LOCATION).size()) {
-            throw new IndexOutOfBoundsException("Error: id doesn't exist");
         }
     }
 }
