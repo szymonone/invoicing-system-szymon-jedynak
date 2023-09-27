@@ -5,8 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import pl.futurecollars.invoicing.db.file.FileDatabase;
 import pl.futurecollars.invoicing.db.file.IdCurrentNumber;
-import pl.futurecollars.invoicing.db.files.FileDatabase;
 import pl.futurecollars.invoicing.service.FileService;
 import pl.futurecollars.invoicing.service.JsonService;
 

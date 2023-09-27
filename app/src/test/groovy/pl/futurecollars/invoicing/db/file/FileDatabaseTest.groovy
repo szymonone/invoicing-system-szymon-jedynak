@@ -1,8 +1,7 @@
-package pl.futurecollars.invoicing.db.files
+package pl.futurecollars.invoicing.db.file
 
 import pl.futurecollars.invoicing.AbstractDatabaseTest
 import pl.futurecollars.invoicing.db.Database
-import pl.futurecollars.invoicing.db.file.IdCurrentNumber
 import pl.futurecollars.invoicing.service.FileService
 import pl.futurecollars.invoicing.service.JsonService
 

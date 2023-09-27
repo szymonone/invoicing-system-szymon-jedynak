@@ -37,6 +37,7 @@ dependencies {
 
     // Use the awesome Spock testing and specification framework even with Java
     testImplementation 'org.spockframework:spock-core:2.2-groovy-3.0'
+    testImplementation 'org.spockframework:spock-spring:2.2-groovy-3.0'
     testImplementation 'junit:junit:4.13.2'
 
     // This dependency is used by the application.
@@ -88,7 +89,7 @@ jacocoTestCoverageVerification {
         rule {
             limit {
                 counter = 'BRANCH'
-                minimum = 0.2
+                minimum = 0.3
             }
         }
 

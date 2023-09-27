@@ -1,4 +1,4 @@
-package pl.futurecollars.invoicing.db.files;
+package pl.futurecollars.invoicing.db.file;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import pl.futurecollars.invoicing.db.Database;
-import pl.futurecollars.invoicing.db.file.IdCurrentNumber;
 import pl.futurecollars.invoicing.model.Invoice;
 import pl.futurecollars.invoicing.service.FileService;
 import pl.futurecollars.invoicing.service.JsonService;
