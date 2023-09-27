@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import pl.futurecollars.invoicing.db.Database;
 import pl.futurecollars.invoicing.db.file.IdCurrentNumber;
 import pl.futurecollars.invoicing.model.Invoice;
 import pl.futurecollars.invoicing.service.FileService;
 import pl.futurecollars.invoicing.service.JsonService;
 
-@Data
 @AllArgsConstructor
 public class FileDatabase implements Database {
 
