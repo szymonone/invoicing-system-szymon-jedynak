@@ -89,7 +89,7 @@ jacocoTestCoverageVerification {
         rule {
             limit {
                 counter = 'BRANCH'
-                minimum = 0.3
+                minimum = 0.7
             }
         }
 
@@ -99,6 +99,12 @@ jacocoTestCoverageVerification {
                 minimum = 0.7
             }
         }
+    }
+
+    afterEvaluate { // TODO [PK] remove after adding tests in Task #5
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: 'pl/futurecollars/invoicing/controller/**')
+        }))
     }
 }
 

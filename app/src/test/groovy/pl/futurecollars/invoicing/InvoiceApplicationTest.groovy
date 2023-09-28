@@ -17,7 +17,7 @@ class InvoiceApplicationTest extends Specification {
         invoiceService
     }
 
-//    @Test
-//    void contextLoad(){
-//    }
+    @Test
+    void contextLoad(){
+    }
 }
