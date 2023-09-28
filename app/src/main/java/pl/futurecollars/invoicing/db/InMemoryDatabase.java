@@ -21,6 +21,7 @@ public class InMemoryDatabase implements Database {
 
     @Override
     public Optional<Invoice> getById(int id) {
+        printIllegalArgumentException(id);
         return Optional.ofNullable(invoices.get(id));
     }
 

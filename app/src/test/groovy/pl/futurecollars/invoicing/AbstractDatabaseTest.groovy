@@ -47,6 +47,14 @@ abstract class AbstractDatabaseTest extends Specification {
         !database.getById(1).isPresent()
     }
 
+    def "Should throw illegal argument exception for getById method"() {
+        when:
+        database.getById(-2)
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
     def "Should throw illegal argument exception for Update method"() {
         when:
         database.update(-2, TestHelper.invoice(4))
