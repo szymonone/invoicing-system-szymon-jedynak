@@ -29,7 +29,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Invoice>> getExactInvoice(@PathVariable("id") int id) {
+    public ResponseEntity<Optional<Invoice>> getInvoice(@PathVariable("id") int id) {
         Optional<Invoice> optionalInvoice = invoiceService.getById(id);
         if (optionalInvoice.isPresent()) {
             return ResponseEntity.ok(optionalInvoice);
@@ -39,9 +39,8 @@ public class InvoiceController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> add(@RequestBody Invoice invoice) {
-        invoiceService.save(invoice);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Integer> add(@RequestBody Invoice invoice) {
+        return ResponseEntity.ok(invoiceService.save(invoice));
     }
 
     @DeleteMapping("/{id}")
